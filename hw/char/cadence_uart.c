@@ -441,11 +441,15 @@ static MemTxResult uart_write(void *opaque, hwaddr offset,
         break;
     case R_TX_RX: /* UARTDR */
         switch (s->r[R_MR] & UART_MR_CHMODE) {
-        case NORMAL_MODE:
-            uart_write_tx_fifo(s, (uint8_t *) &value, 1);
+        case NORMAL_MODE:{
+            uint8_t v = value;
+            uart_write_tx_fifo(s, (uint8_t *) &v, 1);
+        }
             break;
-        case LOCAL_LOOPBACK:
-            uart_write_rx_fifo(opaque, (uint8_t *) &value, 1);
+        case LOCAL_LOOPBACK: {
+            uint8_t v = value;
+            uart_write_rx_fifo(opaque, (uint8_t *) &v, 1);
+        }
             break;
         }
         break;
