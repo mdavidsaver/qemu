@@ -179,8 +179,8 @@ static void at24c_eeprom_realize(DeviceState *dev, Error **errp)
     if (ee->blk) {
         int64_t len = blk_getlength(ee->blk);
 
-        if (len != ee->rsize) {
-            error_setg(errp, "%s: Backing file size %" PRId64 " != %u",
+        if (len < ee->rsize) {
+            error_setg(errp, "%s: Backing file size %" PRId64 " >= %u",
                        TYPE_AT24C_EE, len, ee->rsize);
             return;
         }
