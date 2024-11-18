@@ -520,7 +520,7 @@ static void cadence_uart_reset_init(Object *obj, ResetType type)
 {
     CadenceUARTState *s = CADENCE_UART(obj);
 
-    s->r[R_CR] = 0x00000128;
+    s->r[R_CR] = 0x00000114;
     s->r[R_IMR] = 0;
     s->r[R_CISR] = 0;
     s->r[R_RTRIG] = 0x00000020;
