@@ -443,6 +443,33 @@ static void zynq_init(MachineState *machine)
     create_unimplemented_device("zynq.qos301_dmac", 0xF8947000, 0x130);
     create_unimplemented_device("zynq.qos301_iou", 0xF8948000, 0x130);
 
+    /* PSC specific logic */
+    create_unimplemented_device("psc.axi_bram_ctrl", 0x40000000, 8*1024);
+    //create_unimplemented_device("psc.SEG_axi_iic_0", 0x41600000, 64*1024);
+    { // bus=i2c-bus.0
+        dev = qdev_new("xilinx.i2c");
+        object_property_add_child(qdev_get_machine(), "i2c0", OBJECT(dev));
+        busdev = SYS_BUS_DEVICE(dev);
+        sysbus_realize_and_unref(busdev, &error_fatal);
+        //sysbus_connect_irq(busdev, 0, pic[40 - IRQ_OFFSET]);
+        sysbus_mmio_map(busdev, 0, 0x41600000);
+    }
+    //create_unimplemented_device("psc.SEG_axi_iic_1", 0x41610000, 64*1024);
+    { // bus=i2c-bus.1
+        dev = qdev_new("xilinx.i2c");
+        object_property_add_child(qdev_get_machine(), "i2c1", OBJECT(dev));
+        busdev = SYS_BUS_DEVICE(dev);
+        sysbus_realize_and_unref(busdev, &error_fatal);
+        //sysbus_connect_irq(busdev, 0, pic[40 - IRQ_OFFSET]);
+        sysbus_mmio_map(busdev, 0, 0x41610000);
+    }
+    create_unimplemented_device("psc.ADC2DDR",       0x43C00000, 64*1024);
+    create_unimplemented_device("psc.Multi_Purpose_AXI_IP",
+                                                     0x43C10000, 64*1024);
+    create_unimplemented_device("psc.FromDDR",       0x43C20000, 64*1024);
+    create_unimplemented_device("psc.xadc_wiz",      0x43C30000, 64*1024);
+    create_unimplemented_device("psc.Controller",    0x43C60000, 64*1024);
+
     zynq_binfo.ram_size = machine->ram_size;
     zynq_binfo.board_id = 0xd32;
     zynq_binfo.loader_start = 0;
