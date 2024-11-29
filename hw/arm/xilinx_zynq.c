@@ -467,7 +467,12 @@ static void zynq_init(MachineState *machine)
     create_unimplemented_device("psc.Multi_Purpose_AXI_IP",
                                                      0x43C10000, 64*1024);
     create_unimplemented_device("psc.FromDDR",       0x43C20000, 64*1024);
-    create_unimplemented_device("psc.xadc_wiz",      0x43C30000, 64*1024);
+    //create_unimplemented_device("psc.xadc_wiz",      0x43C30000, 64*1024);
+    {
+        dev = qdev_new("zynq7.xadc");
+        sysbus_realize_and_unref(SYS_BUS_DEVICE(dev), &error_fatal);
+        sysbus_mmio_map(SYS_BUS_DEVICE(dev), 0, 0x43C30000);
+    }
     create_unimplemented_device("psc.Controller",    0x43C60000, 64*1024);
 
     zynq_binfo.ram_size = machine->ram_size;
