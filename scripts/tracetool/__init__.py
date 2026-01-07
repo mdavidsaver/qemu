@@ -76,7 +76,7 @@ ALLOWED_TYPES = [
 def validate_type(name):
     bits = name.split(" ")
     for bit in bits:
-        bit = re.sub("\*", "", bit)
+        bit = re.sub("\\*", "", bit)
         if bit == "":
             continue
         if bit == "const":
@@ -203,12 +203,12 @@ class Event(object):
 
     """
 
-    _CRE = re.compile("((?P<props>[\w\s]+)\s+)?"
-                      "(?P<name>\w+)"
-                      "\((?P<args>[^)]*)\)"
-                      "\s*"
-                      "(?:(?:(?P<fmt_trans>\".+),)?\s*(?P<fmt>\".+))?"
-                      "\s*")
+    _CRE = re.compile("((?P<props>[\\w\\s]+)\\s+)?"
+                      "(?P<name>\\w+)"
+                      "\\((?P<args>[^)]*)\\)"
+                      "\\s*"
+                      "(?:(?:(?P<fmt_trans>\".+),)?\\s*(?P<fmt>\".+))?"
+                      "\\s*")
 
     _VALID_PROPS = set(["disable", "tcg", "tcg-trans", "tcg-exec", "vcpu"])
 
@@ -310,7 +310,7 @@ class Event(object):
                                           fmt)
     # Star matching on PRI is dangerous as one might have multiple
     # arguments with that format, hence the non-greedy version of it.
-    _FMT = re.compile("(%[\d\.]*\w+|%.*?PRI\S+)")
+    _FMT = re.compile("(%[\\d\\.]*\\w+|%.*?PRI\\S+)")
 
     def formats(self):
         """List conversion specifiers in the argument print format string."""
